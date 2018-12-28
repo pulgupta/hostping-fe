@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hostping-fe
+  labels:
+    run: hostping-fe
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 4200
+  selector:
+    run: hostping-fe
+  type: NodePort
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostping-fe
+spec:
+  selector:
+    matchLabels:
+      run: hostping-fe
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: hostping-fe
+    spec:
+      containers:
+      - name: hostping
+        image: pulgupta/hostping-fe
+        ports:
+        - containerPort: 4200
+        
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hostping-fe
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /test/cluster
+        backend:
+          serviceName: hostping-fe
+          servicePort: 80

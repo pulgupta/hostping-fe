@@ -1,0 +1,10 @@
+<div *ngIf="pongMessage!=undefined">
+    <p>
+        hostping works! We are getting the response from the host : {{pongMessage.host.hostname}}
+    </p>
+</div>
+<div *ngIf="pongMessage==undefined">
+    <p>
+        Error! in communicating with the rest service
+    </p>
+</div>
